@@ -13,6 +13,7 @@ const sampleStudents = [
 function App() {
   const [students, setStudents] = useState(sampleStudents);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedClass, setSelectedClass] = useState(""); // Trạng thái cho lớp chọn
 
   const addStudent = (newStudent) => {
     const studentWithId = { ...newStudent, id: Date.now() };
@@ -38,10 +39,23 @@ function App() {
     setSearchQuery(e.target.value);
   };
 
+  const handleClassFilter = (e) => {
+    setSelectedClass(e.target.value);
+  };
+
   // Lọc sinh viên theo tên (không phân biệt hoa thường)
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredStudents = students
+    .filter((student) =>
+      student.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((student) =>
+      selectedClass ? student.class === selectedClass : true
+    );
+
+  // Lấy tất cả các lớp duy nhất từ danh sách sinh viên
+  const uniqueClasses = [
+    ...new Set(students.map((student) => student.class)),
+  ];
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -57,6 +71,22 @@ function App() {
           value={searchQuery}
           onChange={handleSearch}
         />
+      </div>
+
+      {/* Lọc sinh viên theo lớp */}
+      <div className="mb-4">
+        <select
+          className="w-full p-2 border rounded"
+          value={selectedClass}
+          onChange={handleClassFilter}
+        >
+          <option value="">Chọn lớp</option>
+          {uniqueClasses.map((studentClass) => (
+            <option key={studentClass} value={studentClass}>
+              {studentClass}
+            </option>
+          ))}
+        </select>
       </div>
 
       <StudentList
