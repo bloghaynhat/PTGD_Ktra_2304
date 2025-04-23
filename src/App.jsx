@@ -20,13 +20,19 @@ function App() {
     ]);
   };
 
+  const deleteStudent = (id) => {
+    setStudents((prev) => prev.filter((student) => student.id !== id));
+    console.log("Đã xóa student" + id);
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Quản lý sinh viên</h1>
       <StudentForm onAddStudent={addStudent} />
-      <StudentList students={students} />
+      <StudentList students={students} onDeleteStudent={deleteStudent} />
     </div>
   );
 }
 
 export default App;
+
