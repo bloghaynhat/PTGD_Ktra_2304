@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StudentList from "./components/StudentList";
+import StudentForm from "./components/StudentForm";
 
 const sampleStudents = [
   { id: 1, name: "Nguyễn Văn A", class: "12A1", age: 18 },
@@ -12,9 +13,17 @@ const sampleStudents = [
 function App() {
   const [students, setStudents] = useState(sampleStudents);
 
+  const addStudent = (newStudent) => {
+    setStudents((prev) => [
+      ...prev,
+      { ...newStudent, id: Date.now() },
+    ]);
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Quản lý sinh viên</h1>
+      <StudentForm onAddStudent={addStudent} />
       <StudentList students={students} />
     </div>
   );
