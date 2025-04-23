@@ -2,7 +2,7 @@ function App() {
 
   return (
     <>
-      <div className="">Test may</div>
+      <div className="">Xin chao 222 </div>
     </>
   )
 }
