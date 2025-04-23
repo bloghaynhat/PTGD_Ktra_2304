@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StudentList from "./components/StudentList";
 import StudentForm from "./components/StudentForm";
 
@@ -11,28 +11,41 @@ const sampleStudents = [
 ];
 
 function App() {
-  const [students, setStudents] = useState(sampleStudents);
+  // Lấy danh sách sinh viên từ localStorage nếu có, nếu không lấy từ sampleStudents
+  const storedStudents = JSON.parse(localStorage.getItem("students")) || sampleStudents;
+  
+  const [students, setStudents] = useState(storedStudents);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedClass, setSelectedClass] = useState(""); // Trạng thái cho lớp chọn
+  const [selectedClass, setSelectedClass] = useState("");
 
   const addStudent = (newStudent) => {
     const studentWithId = { ...newStudent, id: Date.now() };
     console.log("Thêm sinh viên:", studentWithId);
-    setStudents((prev) => [...prev, studentWithId]);
+    setStudents((prev) => {
+      const updatedStudents = [...prev, studentWithId];
+      localStorage.setItem("students", JSON.stringify(updatedStudents)); // Đồng bộ vào localStorage
+      return updatedStudents;
+    });
   };
 
   const deleteStudent = (id) => {
     console.log("Xoá sinh viên với ID:", id);
-    setStudents((prev) => prev.filter((student) => student.id !== id));
+    setStudents((prev) => {
+      const updatedStudents = prev.filter((student) => student.id !== id);
+      localStorage.setItem("students", JSON.stringify(updatedStudents)); // Đồng bộ vào localStorage
+      return updatedStudents;
+    });
   };
 
   const updateStudent = (updatedStudent) => {
     console.log("Cập nhật sinh viên:", updatedStudent);
-    setStudents((prev) =>
-      prev.map((student) =>
+    setStudents((prev) => {
+      const updatedStudents = prev.map((student) =>
         student.id === updatedStudent.id ? updatedStudent : student
-      )
-    );
+      );
+      localStorage.setItem("students", JSON.stringify(updatedStudents)); // Đồng bộ vào localStorage
+      return updatedStudents;
+    });
   };
 
   const handleSearch = (e) => {
