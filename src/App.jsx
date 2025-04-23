@@ -14,25 +14,36 @@ function App() {
   const [students, setStudents] = useState(sampleStudents);
 
   const addStudent = (newStudent) => {
-    setStudents((prev) => [
-      ...prev,
-      { ...newStudent, id: Date.now() },
-    ]);
+    const studentWithId = { ...newStudent, id: Date.now() };
+    console.log("Thêm sinh viên:", studentWithId);
+    setStudents((prev) => [...prev, studentWithId]);
   };
 
   const deleteStudent = (id) => {
+    console.log("Xoá sinh viên với ID:", id);
     setStudents((prev) => prev.filter((student) => student.id !== id));
-    console.log("Đã xóa student" + id);
+  };
+
+  const updateStudent = (updatedStudent) => {
+    console.log("Cập nhật sinh viên:", updatedStudent);
+    setStudents((prev) =>
+      prev.map((student) =>
+        student.id === updatedStudent.id ? updatedStudent : student
+      )
+    );
   };
 
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Quản lý sinh viên</h1>
       <StudentForm onAddStudent={addStudent} />
-      <StudentList students={students} onDeleteStudent={deleteStudent} />
+      <StudentList
+        students={students}
+        onDeleteStudent={deleteStudent}
+        onUpdateStudent={updateStudent}
+      />
     </div>
   );
 }
 
 export default App;
-

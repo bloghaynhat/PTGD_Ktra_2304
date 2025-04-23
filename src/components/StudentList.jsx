@@ -1,6 +1,6 @@
 import StudentItem from "./StudentItem";
 
-export default function StudentList({ students, onDeleteStudent }) {
+export default function StudentList({ students, onDeleteStudent, onUpdateStudent }) {
   return (
     <div className="space-y-2">
       {students.map((student) => (
@@ -8,6 +8,7 @@ export default function StudentList({ students, onDeleteStudent }) {
           key={student.id}
           student={student}
           onDelete={onDeleteStudent}
+          onUpdate={onUpdateStudent}
         />
       ))}
     </div>
